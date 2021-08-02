@@ -1,5 +1,5 @@
 {
-    "name": "php-ds/php-ds",
+    "name": "ericfortmeyer/php-ds",
     "description": "Lightweight data structures for PHP",
     "type": "library",
     "require": {
