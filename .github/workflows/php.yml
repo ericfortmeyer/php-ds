@@ -38,9 +38,6 @@ jobs:
     - name: Fix linting errors
       run: composer lint-fix
       
-    - name: Set up static analyzer
-      run: composer analyze-init
-      
     - name: Run static analysis
       run: composer analyze
 
