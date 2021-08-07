@@ -1,1 +1,7 @@
 /vendor/
+/node_modules/
+/test-cache/
+.phpunit.result.cache
+/build/
+/dist/
+

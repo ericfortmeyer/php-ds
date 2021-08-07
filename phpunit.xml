@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         colors = "true"
+         verbose="false">
+    <testsuites>
+        <testsuite name="PHP DS Test Suite">
+            <directory suffix="Test.php">tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <const name="PHPUNIT_TESTSUITE" value="true"/>
+        <env name="XDEBUG_MODE" value="coverage" />
+    </php>
+    <coverage cacheDirectory="./test-cache"
+            includeUncoveredFiles="false"
+            processUncoveredFiles="false"
+            pathCoverage="true"
+            ignoreDeprecatedCodeUnits="true"
+            disableCodeCoverageIgnore="true">
+            <include>
+                <directory suffix=".php">src</directory>
+            </include>
+    </coverage>
+</phpunit>

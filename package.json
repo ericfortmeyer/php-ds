@@ -1,0 +1,37 @@
+{
+  "name": "php-ds",
+  "version": "1.0.0",
+  "description": "Lightweight data structures for PHP",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "watch": {
+    "test": {
+      "patterns": ["src", "tests"],
+      "extensions": "php",
+      "runOnChangeOnly": true
+    }
+  },
+  "scripts": {
+    "test": "composer exec \"phpunit --coverage-text\"",
+    "watch": "npm-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericfortmeyer/php-ds.git"
+  },
+  "keywords": [
+    "data-structures",
+    "PHP"
+  ],
+  "author": "Eric Fortmeyer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericfortmeyer/php-ds/issues"
+  },
+  "homepage": "https://github.com/ericfortmeyer/php-ds#readme",
+  "devDependencies": {
+    "npm-watch": "^0.11.0"
+  }
+}

@@ -16,11 +16,7 @@ class NodeCollection implements Countable
 
     public function map(Closure $func): array
     {
-        $results = [];
-        foreach ($this->values as $value) {
-            $results[] = $func($value);
-        }
-        return $results;
+        return array_map($func, $this->values);
     }
 
     public function count(): int
