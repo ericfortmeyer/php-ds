@@ -4,53 +4,73 @@ declare(strict_types=1);
 
 namespace PhpDs;
 
-final class Set
+use Countable;
+
+final class Set implements Countable
 {
     private array $internalMap = [];
 
     /**
-     * @var array<string, string> $keyMap
+     * @var array<string|int|float,string|int|float> $keyMap
      */
-    private array $keyMap = [];
+    private array $hashMap = [];
 
-    public function add(string $key, object $item): void
+    public function add(string|int|float|bool|null|object $member): void
     {
-        $this->internalMap[$key] = $item;
-        $this->keyMap[$key] = $key;
+        $hash = $this->hash($member);
+        $this->internalMap[$hash] = $member;
+        $this->hashMap[$hash] = $hash;
     }
 
-    public function get(string $key): object
+    private function hash(string|int|float|bool|null|object $member): string|int
     {
-        return $this->internalMap[$key];
+        return match (true) {
+            is_object($member) => spl_object_hash($member),
+
+            is_string($member) => md5($member),
+
+            is_null($member) => sha1("NULL"),
+
+            is_integer($member) => $member,
+
+            is_float($member) => number_format($member, 300),
+
+            is_bool($member) => $member === true ? sha1("TRUE") : sha1("FALSE")
+        };
     }
 
-    private function keyOfMax(): string
+    /**
+     * Uses the given key to get a member of the set.
+     *
+     * ```?
+     * Time complexity: O1
+     * ```
+     */
+    public function get(string|int|float|bool|null|object $member): string|int|float|bool|null|object
     {
-        $counts = array_map("count", $this->internalMap);
-        return array_flip($counts)[max($counts)];
+        return $this->internalMap[$this->hash($member)];
+    }
+
+    public function cardinality(): int
+    {
+        return count($this->internalMap);
+    }
+
+    public function count(): int
+    {
+        return count($this->internalMap);
     }
 
     public function max()
     {
-        return $this->internalMap[$this->keyOfMax()];
+        return max($this->internalMap);
     }
 
-    public function keys(): array
-    {
-        return $this->keyMap;
-    }
-
-    public function has(string $key): bool
-    {
-        return key_exists($key, $this->internalMap);
-    }
-
+    /**
+     * Transforms the set into a standard array.
+     */
     public function toArray(): array
     {
-        $arr = [];
-        foreach ($this->internalMap as $v) {
-            $arr[] = $v;
-        }
-        return $arr;
+        return array_values($this->internalMap);
     }
 }

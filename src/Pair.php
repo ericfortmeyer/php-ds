@@ -63,7 +63,7 @@ final class Pair
 
             2 => new self($tuple[0], $tuple[1]),
 
-            default => new InvalidArgumentException(self::TOO_MANY_VALUES_MSG)
+            default => throw new InvalidArgumentException(self::TOO_MANY_VALUES_MSG)
         };
     }
 
