@@ -8,7 +8,7 @@ class SetTest extends TestCase
     public function valueProvider()
     {
         return [
-            [ array_merge(range(1,100), range(10e2, 10e3, 10e2), array_fill(0, 5, (object)""), [true, false]) ]
+            [ array_merge(range(1,100), range(10e2, 10e3, 10e2), range("a", "z"), array_fill(0, 5, (object)""), [true, false, null]) ]
         ];
     }
 
@@ -151,5 +151,41 @@ class SetTest extends TestCase
         $sut->add(3);
 
         $this->assertEquals($sut->count(), $sut->cardinality());
+    }
+
+    public function testReturnsTrueIfSetHasMember()
+    {
+        $sut = new Set();
+        $member = null;
+
+        $sut->add($member);
+
+        $this->assertTrue($sut->hasMember($member));
+    }
+
+    /**
+     * @dataProvider valueProvider
+     */
+    public function testReturnsFalseIfSetDoesNotContainMember(array $values)
+    {
+        $sut = new Set();
+
+        array_walk(
+            $values,
+            function ($value) use ($sut) {
+                $this->assertFalse($sut->hasMember($value));
+            }
+        );
+    }
+
+    public function testReturnsExpectedArray()
+    {
+        $values = [true, false, null, 1, 2, 3, 0x33, 0.1010, 0b1111111111];
+
+        $sut = new Set();
+
+        array_walk($values, [$sut, "add"]);
+
+        $this->assertEquals($values, $sut->toArray());
     }
 }

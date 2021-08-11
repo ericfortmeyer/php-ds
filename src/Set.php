@@ -10,33 +10,20 @@ final class Set implements Countable
 {
     private array $internalMap = [];
 
-    /**
-     * @var array<string|int|float,string|int|float> $keyMap
-     */
-    private array $hashMap = [];
-
     public function add(string|int|float|bool|null|object $member): void
     {
         $hash = $this->hash($member);
         $this->internalMap[$hash] = $member;
-        $this->hashMap[$hash] = $hash;
     }
 
-    private function hash(string|int|float|bool|null|object $member): string|int
+    public function cardinality(): int
     {
-        return match (true) {
-            is_object($member) => spl_object_hash($member),
+        return count($this->internalMap);
+    }
 
-            is_string($member) => md5($member),
-
-            is_null($member) => sha1("NULL"),
-
-            is_integer($member) => $member,
-
-            is_float($member) => number_format($member, 300),
-
-            is_bool($member) => $member === true ? sha1("TRUE") : sha1("FALSE")
-        };
+    public function count(): int
+    {
+        return count($this->internalMap);
     }
 
     /**
@@ -51,17 +38,35 @@ final class Set implements Countable
         return $this->internalMap[$this->hash($member)];
     }
 
-    public function cardinality(): int
+    private function hash(string|int|float|bool|null|object $member): string|int
     {
-        return count($this->internalMap);
+        return match (true) {
+            is_object($member) => spl_object_hash($member),
+
+            is_string($member) => md5($member),
+
+            is_null($member) => sha1("NULL"),
+            
+            is_float($member) => number_format($member, 300),
+            
+            is_bool($member) => $member === true ? sha1("TRUE") : sha1("FALSE"),
+
+            default => $member
+        };
     }
 
-    public function count(): int
+    /**
+     * Determines whether the given item is a member of the set.
+     */
+    public function hasMember(int|float|null|object|bool|string $item): bool
     {
-        return count($this->internalMap);
+        return key_exists($this->hash($item), $this->internalMap);
     }
 
-    public function max()
+    /**
+     * Returns the integer-based maximum value in the set.
+     */
+    public function max(): int|float|null|object|bool|string
     {
         return max($this->internalMap);
     }
